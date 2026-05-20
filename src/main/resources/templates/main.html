@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BookMyTicket</title>
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+<link
+	href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap"
+	rel="stylesheet">
+
+<style>
+:root {
+	--bg-main: #020617;
+	--bg-card: #0f172a;
+	--border: #1e293b;
+	--text-main: #f8fafc;
+	--text-muted: #94a3b8;
+	--accent: #3b82f6;
+	--accent-pink: #ec4899;
+	--accent-glow: rgba(236, 72, 153, 0.4);
+}
+
+/* ===== GLOBAL ===== */
+body {
+	font-family: "Poppins", sans-serif;
+	background-color: var(--bg-main);
+	background-image: 
+		radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+		radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.15), transparent 25%);
+	color: var(--text-main);
+	min-height: 100vh;
+	overflow-x: hidden;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+	background: rgba(2, 6, 23, 0.7) !important;
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+	padding: 1rem 2rem;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+}
+
+.navbar-brand {
+	font-weight: 900;
+	font-size: 1.6rem;
+	background: linear-gradient(135deg, #fff, #cbd5e1);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	letter-spacing: -0.5px;
+}
+
+.nav-link {
+	color: var(--text-muted) !important;
+	font-weight: 600;
+	transition: 0.3s;
+}
+
+.nav-link:hover {
+	color: #fff !important;
+}
+
+/* ===== HERO ===== */
+.hero {
+	padding: 140px 20px;
+	text-align: center;
+	position: relative;
+	margin-bottom: 40px;
+}
+
+.hero::before {
+	content: '';
+	position: absolute;
+	top: -50%;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100vw;
+	height: 200%;
+	background: radial-gradient(circle, rgba(236, 72, 153, 0.08) 0%, transparent 60%);
+	z-index: -1;
+	pointer-events: none;
+}
+
+.hero h1 {
+	font-size: 4.5rem;
+	font-weight: 900;
+	letter-spacing: -2px;
+	line-height: 1.1;
+	margin-bottom: 20px;
+	background: linear-gradient(to right, #fff, #94a3b8);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.hero h1 span {
+	background: linear-gradient(135deg, var(--accent), var(--accent-pink));
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.hero p {
+	color: var(--text-muted);
+	font-size: 1.25rem;
+	max-width: 600px;
+	margin: 0 auto 40px;
+}
+
+/* SEARCH BAR PILL */
+.search-pill {
+	background: rgba(15, 23, 42, 0.6);
+	backdrop-filter: blur(16px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 50px;
+	padding: 8px 12px;
+	display: flex;
+	align-items: center;
+	max-width: 650px;
+	margin: 0 auto;
+	box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+	transition: 0.3s;
+}
+.search-pill:focus-within {
+	border-color: rgba(236, 72, 153, 0.5);
+	box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(236, 72, 153, 0.2);
+}
+
+.search-pill input {
+	background: transparent;
+	border: none;
+	color: white;
+	padding: 15px 20px;
+	width: 100%;
+	font-size: 1.1rem;
+}
+.search-pill input:focus {
+	outline: none;
+}
+.search-pill input::placeholder {
+	color: var(--text-muted);
+}
+.search-pill .icon {
+	color: var(--text-muted);
+	font-size: 1.2rem;
+	margin-left: 15px;
+}
+.search-pill .btn-search {
+	background: linear-gradient(135deg, var(--accent), var(--accent-pink));
+	border: none;
+	color: white;
+	padding: 12px 30px;
+	border-radius: 40px;
+	font-weight: 700;
+	margin-left: 10px;
+	transition: 0.3s;
+}
+.search-pill .btn-search:hover {
+	transform: scale(1.05);
+	box-shadow: 0 10px 20px var(--accent-glow);
+}
+
+/* ===== MOVIES ===== */
+#movies {
+	padding: 60px 0;
+	position: relative;
+	z-index: 10;
+}
+
+.section-title {
+	font-size: 2rem;
+	font-weight: 800;
+	margin-bottom: 40px;
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+.section-title::before {
+	content: '';
+	width: 12px;
+	height: 35px;
+	background: linear-gradient(to bottom, var(--accent), var(--accent-pink));
+	border-radius: 6px;
+	display: inline-block;
+}
+
+/* ===== MOVIE CARD ===== */
+.movie-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 30px;
+}
+
+.movie-card {
+	background: rgba(15, 23, 42, 0.4);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+	border-radius: 24px;
+	overflow: hidden;
+	transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	position: relative;
+}
+
+.movie-card:hover {
+	transform: translateY(-12px);
+	border-color: rgba(236, 72, 153, 0.3);
+	box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(236, 72, 153, 0.15);
+}
+
+.movie-image-wrapper {
+	position: relative;
+	width: 100%;
+	padding-top: 135%; /* Aspect Ratio */
+	overflow: hidden;
+}
+
+.movie-card img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: 0.5s ease;
+}
+
+.movie-card:hover img {
+	transform: scale(1.08);
+}
+
+.movie-overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(to top, rgba(2,6,23,1) 0%, rgba(2,6,23,0) 60%);
+	pointer-events: none;
+}
+
+.card-body {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 25px;
+	z-index: 2;
+}
+
+.movie-card h5 {
+	font-weight: 800;
+	font-size: 1.3rem;
+	margin-bottom: 5px;
+	color: #fff;
+	text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.movie-card .text-muted {
+	color: #cbd5e1 !important;
+	font-size: 0.85rem;
+	font-weight: 500;
+	margin-bottom: 15px;
+}
+
+.movie-card .btn-book {
+	width: 100%;
+	background: rgba(255,255,255,0.1);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255,255,255,0.2);
+	color: white;
+	font-weight: 700;
+	padding: 12px;
+	border-radius: 14px;
+	transition: 0.3s;
+}
+
+.movie-card:hover .btn-book {
+	background: linear-gradient(135deg, var(--accent), var(--accent-pink));
+	border-color: transparent;
+}
+
+/* ===== BUTTONS ===== */
+.btn-outline-light {
+	background: rgba(255,255,255,0.05);
+	border: 1px solid rgba(255,255,255,0.1);
+	color: white;
+	font-weight: 600;
+	border-radius: 12px;
+	padding: 10px 20px;
+}
+.btn-outline-light:hover {
+	background: rgba(255,255,255,0.15);
+	color: white;
+}
+
+.btn-primary {
+	background: linear-gradient(135deg, var(--accent), var(--accent-pink));
+	border: none;
+	font-weight: 600;
+	border-radius: 12px;
+	padding: 10px 24px;
+	box-shadow: 0 8px 20px var(--accent-glow);
+}
+
+/* ===== FOOTER ===== */
+footer {
+	text-align: center;
+	padding: 40px;
+	color: var(--text-muted);
+	margin-top: 80px;
+	border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+@media (max-width: 768px) {
+	.hero h1 { font-size: 3rem; }
+	.search-pill { flex-direction: column; border-radius: 20px; padding: 15px; }
+	.search-pill .btn-search { width: 100%; margin-left: 0; margin-top: 10px; }
+	.search-pill .icon { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+	<!-- NAVBAR -->
+	<nav class="navbar navbar-expand-lg">
+		<a class="navbar-brand" href="/">🎬 BookMyTicket</a>
+
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+			data-bs-target="#navMenu">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div id="navMenu" class="collapse navbar-collapse justify-content-end">
+
+			<div th:if="${session.user == null}">
+				<a href="/login" class="btn btn-outline-light me-2">Login</a> <a
+					href="/register" class="btn btn-primary">Register</a>
+			</div>
+
+			<div th:if="${session.user != null}"
+				class="d-flex align-items-center">
+				<span class="me-3 fw-semibold"
+					th:text="'Hello, ' + ${session.user.name}"></span> <a
+					th:if="${session.user.role=='USER'}" href="/bookings"
+					class="btn btn-outline-light me-2">My Bookings</a> <a
+					href="/profile" class="btn btn-outline-light me-2">Profile</a> <a
+					th:if="${session.user.role=='ADMIN'}" href="/admin-dashboard"
+					class="btn btn-danger me-2">Admin Dashboard</a> <a href="/logout"
+					class="btn btn-primary">Logout</a>
+			</div>
+
+		</div>
+	</nav>
+
+	<!-- TOASTS -->
+	<div class="toastify-container">
+		<div th:if="${pass}" class="toastify success">
+			<span th:text="${pass}"></span>
+		</div>
+		<div th:if="${fail}" class="toastify error">
+			<span th:text="${fail}"></span>
+		</div>
+	</div>
+
+	<!-- HERO -->
+	<section class="hero">
+		<h1>The Ultimate <span>Movie</span> Experience</h1>
+		<p>Skip the line and book your favorite shows in seconds with our beautiful, lightning-fast platform.</p>
+
+		<!-- Real-time Search Pill -->
+		<div class="search-pill mt-4">
+			<i class="bi bi-search icon"></i>
+			<input type="text" id="movieSearch" placeholder="Search movies, genres..." onkeyup="filterMovies()">
+			<button class="btn-search" onclick="document.getElementById('movies').scrollIntoView({behavior: 'smooth'})">Explore</button>
+		</div>
+	</section>
+
+	<script>
+		function filterMovies() {
+			const query = document.getElementById("movieSearch").value.toLowerCase();
+			const cards = document.querySelectorAll(".movie-card-col");
+			let hasResults = false;
+
+			cards.forEach(card => {
+				const title = card.querySelector("h5").innerText.toLowerCase();
+				const genre = card.querySelector(".text-muted").innerText.toLowerCase();
+				if (title.includes(query) || genre.includes(query)) {
+					card.style.display = "block";
+					hasResults = true;
+				} else {
+					card.style.display = "none";
+				}
+			});
+
+			document.getElementById("no-results").style.display = hasResults ? "none" : "block";
+		}
+	</script>
+
+	<!-- MOVIES -->
+	<section class="container" id="movies" th:if="${!movies.isEmpty()}">
+		<h2 class="section-title">Now Showing</h2>
+
+		<div class="movie-grid">
+			<div class="movie-card-col" th:each="movie:${movies}">
+				<div class="movie-card">
+					<div class="movie-image-wrapper">
+						<img th:src="${(movie.imageLink == null or movie.imageLink == '' or #strings.startsWith(movie.imageLink, 'https://placehold.co')) ? '/poster-placeholder.svg' : movie.imageLink}" 
+						     onerror="this.onerror=null;this.src='/poster-placeholder.svg'">
+						<div class="movie-overlay"></div>
+					</div>
+					<div class="card-body">
+						<h5 th:text="${movie.name}"></h5>
+						<p class="text-muted">
+							<span th:text="${movie.genre}"></span> • <span th:text="${movie.duration}"></span> hrs
+						</p>
+						<a th:href="'/book/movie/'+${movie.id}" class="btn btn-book text-center d-block text-decoration-none">Book Tickets</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- No Results Message -->
+		<div id="no-results" class="text-center mt-5" style="display: none;">
+			<h4 class="text-muted">No movies found matching your search.</h4>
+		</div>
+	</section>
+
+	<footer>
+		<p>© 2025 BookMyTicket — All Rights Reserved</p>
+	</footer>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

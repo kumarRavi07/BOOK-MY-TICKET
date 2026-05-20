@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+	<title id="title">Theater placeholder</title>
+	<desc id="desc">A local fallback image for theaters without an uploaded image.</desc>
+	<defs>
+		<linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+			<stop offset="0" stop-color="#0f172a"/>
+			<stop offset="1" stop-color="#1e3a8a"/>
+		</linearGradient>
+	</defs>
+	<rect width="800" height="500" fill="url(#bg)"/>
+	<rect x="96" y="152" width="608" height="236" rx="24" fill="#020617" fill-opacity=".5" stroke="#f8fafc" stroke-opacity=".24" stroke-width="5"/>
+	<path d="M150 190h500v78H150z" fill="#f8fafc" fill-opacity=".14"/>
+	<path d="M190 336h420" stroke="#f8fafc" stroke-opacity=".5" stroke-width="16" stroke-linecap="round" stroke-dasharray="24 26"/>
+	<text x="400" y="262" text-anchor="middle" fill="#f8fafc" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">Theater Image</text>
+	<text x="400" y="314" text-anchor="middle" fill="#cbd5e1" font-family="Arial, Helvetica, sans-serif" font-size="25">Coming Soon</text>
+</svg>

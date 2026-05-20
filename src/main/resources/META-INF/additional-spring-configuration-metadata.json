@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "admin.email",
+    "type": "java.lang.String",
+    "description": "A description for 'admin.email'"
+  },
+  {
+    "name": "cloudinary.url",
+    "type": "java.lang.String",
+    "description": "A description for 'cloudinary.url'"
+  },
+  {
+    "name": "admin.password",
+    "type": "java.lang.String",
+    "description": "A description for 'admin.password'"
+  },
+  {
+    "name": "razorpay.key",
+    "type": "java.lang.String",
+    "description": "Razorpay key ID used to create checkout orders."
+  },
+  {
+    "name": "razorpay.secret",
+    "type": "java.lang.String",
+    "description": "Razorpay key secret used to create checkout orders."
+  }
+]}

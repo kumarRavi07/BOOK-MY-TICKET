@@ -1,0 +1,33 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: book-my-ticket
+  datasource:
+    url: jdbc:mysql://localhost:3306/book-my-ticket?createDatabaseIfNotExist=true
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        '[format_sql]': true
+  data:
+    redis:
+      url: redis://localhost:6379
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 30MB
+admin:
+  email: admin@gmail.com
+  password: admin
+cloudinary:
+ url: ${CLOUDINARY_URL:}
+razorpay:
+  key: ${RAZORPAY_KEY:}
+  secret: ${RAZORPAY_SECRET:}
+app:
+  upload-dir: uploads

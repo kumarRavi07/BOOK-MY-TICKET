@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" role="img" aria-labelledby="title desc">
+	<title id="title">Movie poster placeholder</title>
+	<desc id="desc">A local fallback poster for movies without an uploaded image.</desc>
+	<defs>
+		<linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+			<stop offset="0" stop-color="#111827"/>
+			<stop offset="0.55" stop-color="#172554"/>
+			<stop offset="1" stop-color="#831843"/>
+		</linearGradient>
+	</defs>
+	<rect width="600" height="900" fill="url(#bg)"/>
+	<rect x="48" y="56" width="504" height="788" rx="28" fill="none" stroke="#f8fafc" stroke-opacity=".22" stroke-width="6"/>
+	<circle cx="300" cy="330" r="94" fill="#f8fafc" fill-opacity=".12"/>
+	<path d="M268 280v100l88-50z" fill="#f8fafc" fill-opacity=".9"/>
+	<text x="300" y="535" text-anchor="middle" fill="#f8fafc" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700">Poster</text>
+	<text x="300" y="592" text-anchor="middle" fill="#cbd5e1" font-family="Arial, Helvetica, sans-serif" font-size="30">Coming Soon</text>
+</svg>

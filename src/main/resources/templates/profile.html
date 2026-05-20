@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Settings | BookMyTicket</title>
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+<!-- Bootstrap -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap"
+	rel="stylesheet">
+
+<style>
+:root {
+	--bg-main: #0f172a;
+	--bg-card: #111827;
+	--border-soft: #1f2937;
+	--text-main: #e5e7eb;
+	--text-muted: #9ca3af;
+	--accent: #6496ff;
+	--accent-pink: #ff4081;
+	--success: #22c55e;
+}
+
+body {
+	font-family: "Poppins", sans-serif;
+	background: radial-gradient(circle at top, #1e293b, var(--bg-main));
+	min-height: 100vh;
+	color: var(--text-main);
+	padding: 40px 20px;
+}
+
+/* Card */
+.profile-card {
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
+	background: linear-gradient(180deg, #111827, #0b1220);
+	border-radius: 24px;
+	border: 1px solid var(--border-soft);
+	box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+	overflow: hidden;
+}
+
+/* Header */
+.profile-header {
+	padding: 40px;
+	background: linear-gradient(135deg, rgba(100, 150, 255, 0.1), rgba(255, 64, 129, 0.1));
+	border-bottom: 1px solid var(--border-soft);
+	display: flex;
+	align-items: center;
+	gap: 30px;
+}
+
+.profile-avatar {
+	width: 100px;
+	height: 100px;
+	background: linear-gradient(135deg, var(--accent), var(--accent-pink));
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2.5rem;
+	font-weight: 900;
+	color: white;
+	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.profile-title h1 {
+	font-size: 1.8rem;
+	font-weight: 900;
+	margin-bottom: 5px;
+}
+
+.profile-title p {
+	color: var(--text-muted);
+	margin-bottom: 0;
+	font-weight: 500;
+}
+
+/* Form Section */
+.profile-body {
+	padding: 40px;
+}
+
+.section-title {
+	font-weight: 800;
+	font-size: 1.1rem;
+	margin-bottom: 25px;
+	letter-spacing: 0.5px;
+	color: var(--accent);
+	text-transform: uppercase;
+}
+
+.form-group {
+	margin-bottom: 25px;
+}
+
+label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 600;
+	font-size: 0.9rem;
+	color: var(--text-muted);
+}
+
+.form-control {
+	background: #020617;
+	border: 1.5px solid var(--border-soft);
+	border-radius: 12px;
+	padding: 12px 18px;
+	color: var(--text-main);
+	font-weight: 600;
+	transition: all 0.3s ease;
+}
+
+.form-control:focus {
+	background: #020617;
+	border-color: var(--accent);
+	box-shadow: 0 0 0 4px rgba(100, 150, 255, 0.15);
+	outline: none;
+	color: white;
+}
+
+.form-control:disabled {
+	background: #0b1222;
+	color: #64748b;
+	cursor: not-allowed;
+}
+
+/* Actions */
+.profile-actions {
+	display: flex;
+	gap: 15px;
+	margin-top: 40px;
+}
+
+.btn-save {
+	flex: 1;
+	background: linear-gradient(135deg, var(--accent), #4f46e5);
+	color: white;
+	border: none;
+	padding: 14px;
+	border-radius: 12px;
+	font-weight: 800;
+	box-shadow: 0 12px 30px rgba(100, 150, 255, 0.4);
+	transition: all 0.3s ease;
+}
+
+.btn-save:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 18px 45px rgba(100, 150, 255, 0.6);
+}
+
+.btn-back {
+	flex: 1;
+	background: transparent;
+	border: 1px solid var(--border-soft);
+	color: var(--text-muted);
+	padding: 14px;
+	border-radius: 12px;
+	font-weight: 700;
+	text-decoration: none;
+	text-align: center;
+	transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+	border-color: white;
+	color: white;
+}
+
+/* Toasts */
+.toastify-container {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 9999;
+}
+
+.toastify {
+	min-width: 280px;
+	padding: 16px 20px;
+	border-radius: 12px;
+	color: white;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+	animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.toastify.success { background: #16a34a; }
+.toastify.error { background: #dc2626; }
+
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+</style>
+</head>
+
+<body>
+
+	<!-- TOASTS -->
+	<div class="toastify-container">
+		<div th:if="${pass}" class="toastify success">
+			<span th:text="${pass}"></span>
+		</div>
+		<div th:if="${fail}" class="toastify error">
+			<span th:text="${fail}"></span>
+		</div>
+	</div>
+
+	<div class="profile-card">
+		<div class="profile-header">
+			<div class="profile-avatar" th:text="${#strings.substring(user.name, 0, 1).toUpperCase()}">U</div>
+			<div class="profile-title">
+				<h1 th:text="'Account: ' + ${user.name}">Account: Silas</h1>
+				<p th:text="${user.role}">USER</p>
+			</div>
+		</div>
+
+		<div class="profile-body">
+			<form action="/update-profile" method="post">
+				
+				<div class="section-title">Personal Information</div>
+
+				<div class="form-group">
+					<label>Full Name</label>
+					<input type="text" class="form-control" name="name" th:value="${user.name}" required>
+				</div>
+
+				<div class="form-group">
+					<label>Email Address (Cannot be changed)</label>
+					<input type="email" class="form-control" th:value="${user.email}" disabled>
+					<input type="hidden" name="email" th:value="${user.email}">
+				</div>
+
+				<div class="info-grid row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Mobile Number</label>
+							<input type="number" class="form-control" name="mobile" th:value="${user.mobile}" required>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Account Role</label>
+							<input type="text" class="form-control" th:value="${user.role}" disabled>
+						</div>
+					</div>
+				</div>
+
+				<div class="profile-actions">
+					<a href="/" class="btn-back">Cancel</a>
+					<button type="submit" class="btn-save">Save Changes</button>
+				</div>
+
+			</form>
+		</div>
+	</div>
+
+	<script>
+		setTimeout(() => {
+			const toasts = document.querySelectorAll('.toastify');
+			toasts.forEach(t => t.style.display = 'none');
+		}, 3500);
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Dashboard | BookMyTicket</title>
+
+	<!-- Favicon -->
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+	<!-- Bootstrap & Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap"
+		rel="stylesheet">
+
+	<style>
+		:root {
+			--bg-main: #020617;
+			--bg-card: #0f172a;
+			--border-soft: rgba(255, 255, 255, 0.05);
+			--text-main: #f8fafc;
+			--text-muted: #94a3b8;
+			--accent: #3b82f6;
+			--accent-pink: #ec4899;
+		}
+
+		body {
+			font-family: "Poppins", sans-serif;
+			background-color: var(--bg-main);
+			background-image:
+				radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.1), transparent 30%),
+				radial-gradient(circle at 100% 100%, rgba(236, 72, 153, 0.1), transparent 30%);
+			color: var(--text-main);
+			min-height: 100vh;
+			margin: 0;
+			overflow-x: hidden;
+		}
+
+		/* Sidebar Layout */
+		.dashboard-layout {
+			display: flex;
+			min-height: 100vh;
+		}
+
+		.sidebar {
+			width: 280px;
+			background: rgba(15, 23, 42, 0.6);
+			backdrop-filter: blur(20px);
+			border-right: 1px solid var(--border-soft);
+			padding: 30px 20px;
+			position: fixed;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.sidebar-brand {
+			font-weight: 900;
+			font-size: 1.5rem;
+			background: linear-gradient(135deg, #fff, #cbd5e1);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			margin-bottom: 40px;
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.nav-links {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.nav-item {
+			display: flex;
+			align-items: center;
+			gap: 15px;
+			padding: 15px 20px;
+			color: var(--text-muted);
+			text-decoration: none;
+			border-radius: 14px;
+			font-weight: 600;
+			transition: 0.3s;
+		}
+
+		.nav-item:hover,
+		.nav-item.active {
+			background: rgba(255, 255, 255, 0.05);
+			color: #fff;
+			box-shadow: inset 2px 0 0 var(--accent-pink);
+		}
+
+		.nav-item.logout {
+			margin-top: auto;
+			color: #ef4444;
+		}
+
+		.nav-item.logout:hover {
+			background: rgba(239, 68, 68, 0.1);
+			box-shadow: inset 2px 0 0 #ef4444;
+		}
+
+		.main-content {
+			flex: 1;
+			padding: 40px 50px;
+			margin-left: 280px;
+		}
+
+		/* Stats Cards */
+		.stat-card {
+			background: rgba(15, 23, 42, 0.4);
+			backdrop-filter: blur(10px);
+			border: 1px solid var(--border-soft);
+			border-radius: 24px;
+			padding: 30px;
+			height: 100%;
+			transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.stat-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+			pointer-events: none;
+		}
+
+		.stat-card:hover {
+			transform: translateY(-8px);
+			border-color: rgba(59, 130, 246, 0.3);
+			box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+		}
+
+		.stat-icon {
+			width: 55px;
+			height: 55px;
+			border-radius: 14px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.5rem;
+			margin-bottom: 20px;
+		}
+
+		.icon-users {
+			background: rgba(59, 130, 246, 0.15);
+			color: #3b82f6;
+		}
+
+		.icon-theaters {
+			background: rgba(168, 85, 247, 0.15);
+			color: #a855f7;
+		}
+
+		.icon-movies {
+			background: rgba(236, 72, 153, 0.15);
+			color: #ec4899;
+		}
+
+		.icon-revenue {
+			background: rgba(34, 197, 94, 0.15);
+			color: #22c55e;
+		}
+
+		.stat-value {
+			font-size: 2.2rem;
+			font-weight: 900;
+			margin-bottom: 5px;
+			color: #fff;
+			letter-spacing: -1px;
+		}
+
+		.stat-label {
+			color: var(--text-muted);
+			font-size: 0.95rem;
+			font-weight: 600;
+		}
+
+		/* Recent Bookings Table */
+		.dashboard-section {
+			margin-top: 60px;
+		}
+
+		.section-header {
+			margin-bottom: 30px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.section-header h2 {
+			font-weight: 800;
+			font-size: 1.8rem;
+		}
+
+		.table-box {
+			background: rgba(15, 23, 42, 0.4);
+			backdrop-filter: blur(10px);
+			border: 1px solid var(--border-soft);
+			border-radius: 24px;
+			overflow: hidden;
+		}
+
+		.table {
+			color: var(--text-main);
+			margin-bottom: 0;
+		}
+
+		.table thead th {
+			background: rgba(2, 6, 23, 0.5);
+			border-bottom: 1px solid var(--border-soft);
+			padding: 20px;
+			font-size: 0.85rem;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			color: var(--text-muted);
+		}
+
+		.table tbody td {
+			padding: 20px;
+			border-bottom: 1px solid var(--border-soft);
+			vertical-align: middle;
+		}
+
+		.table tbody tr:hover {
+			background: rgba(255, 255, 255, 0.02);
+		}
+
+		.table tbody tr:last-child td {
+			border-bottom: none;
+		}
+
+		.user-badge {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.user-avatar {
+			width: 40px;
+			height: 40px;
+			background: linear-gradient(135deg, var(--accent), var(--accent-pink));
+			border-radius: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: 800;
+			color: white;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(15px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.animate-fadeIn {
+			animation: fadeIn 0.5s ease backwards;
+		}
+
+		@media (max-width: 992px) {
+			.sidebar {
+				width: 100%;
+				height: auto;
+				position: relative;
+				border-right: none;
+				border-bottom: 1px solid var(--border-soft);
+			}
+
+			.main-content {
+				margin-left: 0;
+				padding: 20px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="dashboard-layout">
+
+		<!-- SIDEBAR -->
+		<aside class="sidebar">
+			<a class="sidebar-brand" href="/">🎬 Admin</a>
+
+			<div class="nav-links">
+				<a href="/admin-dashboard" class="nav-item active">
+					<i class="bi bi-grid-1x2-fill"></i> Dashboard
+				</a>
+				<a href="/manage-movies" class="nav-item">
+					<i class="bi bi-film"></i> Movies
+				</a>
+				<a href="/manage-theaters" class="nav-item">
+					<i class="bi bi-building"></i> Theaters
+				</a>
+				<a href="/manage-users" class="nav-item">
+					<i class="bi bi-people-fill"></i> Users
+				</a>
+
+				<a href="/logout" class="nav-item logout">
+					<i class="bi bi-box-arrow-right"></i> Logout
+				</a>
+			</div>
+		</aside>
+
+		<!-- MAIN CONTENT -->
+		<main class="main-content">
+			<div class="animate-fadeIn">
+				<h1 class="fw-900 mb-2">Welcome Back, Admin!</h1>
+				<p class="text-muted mb-5">Overview of your movie ticket booking empire.</p>
+			</div>
+
+			<!-- Stats Grid -->
+			<div class="row g-4 mb-5">
+				<div class="col-md-3 animate-fadeIn" style="animation-delay: 0.1s">
+					<div class="stat-card">
+						<div class="stat-icon icon-users"><i class="bi bi-people-fill"></i></div>
+						<div class="stat-value" th:text="${totalUsers}">1,250</div>
+						<div class="stat-label">Total Users</div>
+					</div>
+				</div>
+				<div class="col-md-3 animate-fadeIn" style="animation-delay: 0.2s">
+					<div class="stat-card">
+						<div class="stat-icon icon-theaters"><i class="bi bi-building"></i></div>
+						<div class="stat-value" th:text="${totalTheaters}">42</div>
+						<div class="stat-label">Theaters</div>
+					</div>
+				</div>
+				<div class="col-md-3 animate-fadeIn" style="animation-delay: 0.3s">
+					<div class="stat-card">
+						<div class="stat-icon icon-movies"><i class="bi bi-film"></i></div>
+						<div class="stat-value" th:text="${totalMovies}">85</div>
+						<div class="stat-label">Movies Listed</div>
+					</div>
+				</div>
+				<div class="col-md-3 animate-fadeIn" style="animation-delay: 0.4s">
+					<div class="stat-card">
+						<div class="stat-icon icon-revenue"><i class="bi bi-currency-rupee"></i></div>
+						<div class="stat-value" th:text="'₹' + ${totalRevenue}">₹4,25,000</div>
+						<div class="stat-label">Total Revenue</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Recent Bookings -->
+			<div class="dashboard-section animate-fadeIn" style="animation-delay: 0.5s">
+				<div class="section-header">
+					<h2>🎫 Recent Bookings</h2>
+					<span class="text-muted" th:text="${totalShows} + ' Shows Scheduled'"></span>
+				</div>
+
+				<div class="table-box">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Customer</th>
+								<th>Movie</th>
+								<th>Date & Time</th>
+								<th>Amount</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="booking : ${recentBookings}">
+								<td>
+									<div class="user-badge">
+										<div class="user-avatar"
+											th:text="${#strings.substring(booking.user.name, 0, 1).toUpperCase()}">U
+										</div>
+										<div>
+											<div class="fw-bold text-white" th:text="${booking.user.name}">John Doe
+											</div>
+											<small class="text-muted"
+												th:text="${booking.user.email}">john@example.com</small>
+										</div>
+									</div>
+								</td>
+								<td class="text-white fw-semibold" th:text="${booking.movieName}">Inception</td>
+								<td>
+									<div th:text="${booking.showDate}">Nov 20, 2023</div>
+									<small class="text-muted" th:text="${booking.showTiming}">18:00</small>
+								</td>
+								<td class="fw-bold" style="color: var(--accent-pink)"
+									th:text="'₹' + (${booking.ticketPrice * booking.ticketCount})">₹500</td>
+								<td><span
+										class="badge bg-success-subtle text-success px-3 py-2 rounded-pill border border-success">CONFIRMED</span>
+								</td>
+							</tr>
+							<tr th:if="${recentBookings.isEmpty()}">
+								<td colspan="5" class="text-center py-5 text-muted">No recent bookings found.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
